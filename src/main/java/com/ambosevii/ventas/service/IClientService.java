@@ -11,4 +11,6 @@ public interface IClientService {
     Client save(Client client);
     Optional<Client> findByEmail(String email);
     List<Client> findAll();
+    Client update(Long id,Client client);
+
 }
