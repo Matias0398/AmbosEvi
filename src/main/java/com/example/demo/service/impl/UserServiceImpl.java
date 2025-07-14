@@ -1,11 +1,14 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
+import com.example.demo.enums.Role;
 import com.example.demo.repository.IUserRepository;
 import com.example.demo.service.IUserService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User save(User user) {
+        user.setActive(true);
+        user.setRole(Role.USER);
+        user.setCreatedAt(new Date());
+        user.setUpdatedAt(new Date());
         return userRepository.save(user);
     }
 
@@ -33,5 +40,18 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public void delete(Long id) {
+        Optional<User> userOptional = findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setActive(false);
+            user.setUpdatedAt(new Date());
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
     }
 }

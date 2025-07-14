@@ -10,4 +10,5 @@ public interface IUserService {
     User save(User user);
     Optional<User> findByEmail(String email);
     List<User> findAll();
+    void delete(Long id);
 }
